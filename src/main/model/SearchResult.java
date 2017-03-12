@@ -1,6 +1,5 @@
 package main.model;
 
-import java.awt.Color;
 import java.time.LocalTime;
 
 public class SearchResult {
@@ -10,12 +9,6 @@ public class SearchResult {
 	private String URL;
 	
 	private String httpStatus;
-	
-	private static final String HEADER = Color.GREEN + "_[ - ]::--------------------------------------------------------";
-	
-	private static final String LINE = "_[ + ] ";
-	
-	
 	
 	public SearchResult(String title, String URL, String httpStatus){
 		setTitle(title);
@@ -29,38 +22,61 @@ public class SearchResult {
 		setURL(String);
 	}
 	
+	/*
+	 * Set Title
+	 * @param title
+	 */
 	public void setTitle(String title){
 		this.title = title;
 	}
+	
+	/*
+	 * Set URL
+	 * @param URL
+	 */
 	public void setURL(String URL){
 		this.URL = URL;
 	}
 	
+	/*
+	 * Set Http Status
+	 * @param httpStatus
+	 */
 	public void setHttpStatus(String httpStatus){
 		this.httpStatus = httpStatus;
 	}
 	
+	/*
+	 * Get Title
+	 * @return		String represent Title
+	 */
 	public String getTitle(){
 		return title;
 	}
 	
+	/*
+	 * Get URL
+	 * @return		String represent URL
+	 */
 	public String getURL(){
 		return URL;
 	}
 	
+	/*
+	 * Get Http Status
+	 * @return		String represent Http Status
+	 */
 	public String getHttpStatus(){
 		return httpStatus;
 	}
 	
 	@Override
 	public String toString(){
-		return new StringBuilder(HEADER)
-				.append("\n")
-				.append(LINE  + LocalTime.now())
+		return new StringBuilder( )
+				.append(LocalTime.now())
 				.append(" URL: ")
 				.append(URL)
 				.append("\n ")
-				.append(LINE)
 				.append(title)
 				.append("\n")
 				.append(httpStatus)

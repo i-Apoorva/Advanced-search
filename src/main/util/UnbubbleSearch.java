@@ -11,7 +11,6 @@ import main.model.SearchResult;
 public final class UnbubbleSearch extends SearchEngine {
 	
 	private static final String DOMAIN_NAME = "https://www.unbubble.eu";
-	private UserAgents agents;
 	private ArrayList<SearchResult> array;
 	private Connection connection;
 	private String query;
@@ -26,11 +25,11 @@ public final class UnbubbleSearch extends SearchEngine {
 		
 		array = new ArrayList();
 		
-		agents = new UserAgents();	
-		
+		//Get Connect to the Server
 		connection = Jsoup.connect(new StringBuilder(DOMAIN_NAME)
 								.append("/?focus=web&q=").append(query).toString());
 		
+		//Get HTML Document
         Document doc = 	connection
         				.userAgent(DEFAULT_USER_AGENT)
         				.followRedirects(true)
@@ -41,16 +40,13 @@ public final class UnbubbleSearch extends SearchEngine {
         
         Elements primary = main.select("li");
         
-        httpStatus = new StringBuilder(Integer.toString(connection.response().statusCode()))
-				.append(" ")
-				.append(connection.response().statusMessage())
-				.toString();
+        httpStatus = getHttpStatus(connection);
 
-        
+      //Get title and url to all results
         for (Element result : primary){
         	
-        	String title = getNewsTitle(result);
-        	String url = getNewsURL(result);
+        	String title = getSearchTitle(result);
+        	String url = getSearchURL(result);
         	
         	
         	array.add(new SearchResult(title, url, httpStatus));
@@ -61,19 +57,36 @@ public final class UnbubbleSearch extends SearchEngine {
 		
 	}
 	
-	private String getNewsTitle(Element e){
+	/*
+	 * Return the news title
+	 * 
+	 * @param e an HTML Element 
+	 * @return		String that represent the Title
+	 */
+	private String getSearchTitle(Element e){
 		return e.select("h3.title").text();
 	}
 	
-	private String getNewsURL(Element e){
+	/*
+	 * Return the news URL
+	 * 
+	 * @param e an HTML Element
+	 * @return		String that represent URL
+	 */
+	private String getSearchURL(Element e){
 		return e.select("div.detailsUrl").text();
 	}
-
-	//@Override
-	/*public ArrayList<SearchResult> search(String query, int max) throws Exception {
-		// TODO Auto-generated method stub
+	/*
+	 * Return the Http status
+	 * @param connection an Connection Object
+	 * @return		String that represent the http status 
+	 */
+	private String getHttpStatus(Connection connection){
 		
-	}*/
-
+        return new StringBuilder(Integer.toString(connection.response().statusCode()))
+				.append(" ")
+				.append(connection.response().statusMessage())
+				.toString();
+	}
 }
 

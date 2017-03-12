@@ -12,7 +12,6 @@ import main.model.SearchResult;
 public class YippySearch extends SearchEngine {
 	
 	private static final String NAME_DOMAIN = "http://yippy.com";
-	private UserAgents agents;
 	private ArrayList<SearchResult> array;
 	private Connection connection;
 	private String query;
@@ -26,28 +25,26 @@ public class YippySearch extends SearchEngine {
 		
 		array = new ArrayList();
 		
+		//Get Connect to Server
 		Connection connection = Jsoup.connect(new StringBuilder(NAME_DOMAIN)
 				.append("/search?v%3Aproject=clusty-new&query=").append(query).toString());
-
+		
+		//Get HTML Document
 		final Document doc = connection
 				.userAgent(DEFAULT_USER_AGENT)
 				.followRedirects(true)
 				.timeout(DEFAULT_TIMEOUT)
 				.get();
 		
-		Elements news = doc.select("ul.results").select("a.title");
+		httpStatus = getHttpStatus(connection);
 		
-		httpStatus = new StringBuilder(Integer.toString(connection.response().statusCode()))
-				.append(" ")
-				.append(connection.response().statusMessage())
-				.toString();
-
+		Elements news = doc.select("ul.results").select("a.title");
 		
 		for (Element result : news){
 			
-			String title = getNewsTitle(result);
+			String title = getSearchTitle(result);
 			
-			String url = getNewsURL(result);
+			String url = getSearchURL(result);
 			
 			array.add(new SearchResult(title, url, httpStatus));
 		}
@@ -55,11 +52,36 @@ public class YippySearch extends SearchEngine {
 		return array;
 	}
 	
-	private String getNewsTitle(Element e){
+	/*
+	 * Return the search title
+	 * 
+	 * @param e an HTML Element 
+	 * @return		String that represent the Title
+	 */
+	private String getSearchTitle(Element e){
 		return e.text();		
 	}
 	
-	private String getNewsURL(Element e){
+	/*
+	 * Return the search URL
+	 * 
+	 * @param e an HTML Element
+	 * @return		String that represent URL
+	 */
+	private String getSearchURL(Element e){
 		return e.attr("href");
-	}	
+	}
+	
+	/*
+	 * Return the Http status
+	 * @param connection an Connection Object
+	 * @return		String that represent the http status 
+	 */
+	private String getHttpStatus(Connection connection){
+		
+        return new StringBuilder(Integer.toString(connection.response().statusCode()))
+				.append(" ")
+				.append(connection.response().statusMessage())
+				.toString();
+	}
 }
