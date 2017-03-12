@@ -11,7 +11,6 @@ import main.model.SearchResult;
 public final class YandexSearch extends SearchEngine {
 	
 	private static final String DOMAIN_NAME = "https://www.yandex.com";
-	private UserAgents agents;
 	private ArrayList<SearchResult> array;
 	private Connection connection;
 	private String query;
@@ -26,12 +25,12 @@ public final class YandexSearch extends SearchEngine {
 		
 		array = new ArrayList();
 		
-		agents = new UserAgents();	
-		
+		//Get Connect to the Server
 		connection = Jsoup.connect(new StringBuilder(DOMAIN_NAME)
 								.append("/yandsearch?text=").append(query).toString());
 		
-        Document doc = 	connection
+		//Get HTML Document
+		Document doc = 	connection
         				.userAgent(DEFAULT_USER_AGENT)
         				.followRedirects(true)
         				.timeout(DEFAULT_TIMEOUT)
@@ -41,16 +40,14 @@ public final class YandexSearch extends SearchEngine {
         
         Elements primary = main.select("li.serp-item");
         
-        httpStatus = new StringBuilder(Integer.toString(connection.response().statusCode()))
-				.append(" ")
-				.append(connection.response().statusMessage())
-				.toString();
+        //Get HTTP Status
+        httpStatus = getHttpStatus(connection);
 
         
         for (Element result : primary){
         	
-        	String title = getNewsTitle(result);
-        	String url = getNewsURL(result);
+        	String title = getSearchTitle(result);
+        	String url = getSearchURL(result);
         	
         	
         	array.add(new SearchResult(title, url, httpStatus));
@@ -61,12 +58,36 @@ public final class YandexSearch extends SearchEngine {
 		
 	}
 	
-	private String getNewsTitle(Element e){
+	/*
+	 * Return the search title
+	 * 
+	 * @param e an HTML Element 
+	 * @return		String that represent the Title
+	 */
+	private String getSearchTitle(Element e){
 		return e.select("a.link").text();
 	}
 	
-	private String getNewsURL(Element e){
+	/*
+	 * Return the search URL
+	 * 
+	 * @param e an HTML Element
+	 * @return		String that represent URL
+	 */
+	private String getSearchURL(Element e){
 		return e.select("a.link").attr("href");
+	}
+	/*
+	 * Return the Http status
+	 * @param connection an Connection Object
+	 * @return		String that represent the http status 
+	 */
+	private String getHttpStatus(Connection connection){
+		
+        return new StringBuilder(Integer.toString(connection.response().statusCode()))
+				.append(" ")
+				.append(connection.response().statusMessage())
+				.toString();
 	}
 
 	//@Override

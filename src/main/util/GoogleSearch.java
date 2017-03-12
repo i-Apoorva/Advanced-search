@@ -12,7 +12,6 @@ import main.model.SearchResult;
 public final class GoogleSearch extends SearchEngine {
 	
 	private static final String NAME_DOMAIN = "https://google.com";
-	private UserAgents agents;
 	private Connection connection;
 	private ArrayList<SearchResult> array;
 	private String query;
@@ -27,24 +26,24 @@ public final class GoogleSearch extends SearchEngine {
 		
 		array = new ArrayList();
 		
+		//Connect to Server
 		connection = Jsoup.connect(new StringBuilder(NAME_DOMAIN)
 				.append("/search?q=").append(query).toString());
-
+		
+		//Get HTML Document
 		final Document doc = connection
 				.userAgent(DEFAULT_USER_AGENT)
 				.followRedirects(true)
 				.timeout(DEFAULT_TIMEOUT)
 				.get();
 		
-		httpStatus = new StringBuilder(Integer.toString(connection.response().statusCode()))
-				.append(" ")
-				.append(connection.response().statusMessage())
-				.toString();
-
+		httpStatus = getHttpStatus(connection);
+		
+		//Get title and url to all results
 		for (Element result : doc.select("h3.r a")){
 
-			String title = getNewsTitle(result);
-			String url = getNewsURL(result);
+			String title = getSearchTitle(result);
+			String url = getSearchURL(result);
 
 			array.add(new SearchResult(title, url, httpStatus));
 		}
@@ -52,12 +51,37 @@ public final class GoogleSearch extends SearchEngine {
 		return array;
 	}
 	
-	private String getNewsTitle(Element e){
+	/*
+	 * Return the news title
+	 * 
+	 * @param e an HTML Element 
+	 * @return		String that represent the Title
+	 */
+	private String getSearchTitle(Element e){
 		return e.text();
 	}
 	
-	private String getNewsURL(Element e){
+	/*
+	 * Return the news URL
+	 * 
+	 * @param e an HTML Element
+	 * @return		String that represent URL
+	 */
+	private String getSearchURL(Element e){
 		return e.attr("href");
+	}
+	
+	/*
+	 * Return the Http status
+	 * @param connection an Connection Object
+	 * @return		String that represent the http status 
+	 */
+	private String getHttpStatus(Connection connection){
+		
+        return new StringBuilder(Integer.toString(connection.response().statusCode()))
+				.append(" ")
+				.append(connection.response().statusMessage())
+				.toString();
 	}
 	//@Override
 	public ArrayList<SearchResult> search(String query, int max) throws Exception {
