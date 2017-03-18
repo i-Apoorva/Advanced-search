@@ -17,8 +17,46 @@ public class WikileaksSearch extends SearchEngine{
 	private String httpStatus;
 	
 	public WikileaksSearch(String query){
-		this.query = query;
+		setQuery(query);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setPage(1);
+		setTimeout(DEFAULT_TIMEOUT);
 	}
+	
+	public WikileaksSearch(String query, String userAgent){
+		setUserAgent(userAgent);
+		setPage(1);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public WikileaksSearch(String query, int page){
+		setQuery(query);
+		setPage(page);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public WikileaksSearch(String query, int page, int timeout){
+		setQuery(query);
+		setPage(page);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setTimeout(timeout);
+	}
+	
+	public WikileaksSearch(String query, String userAgent, int page){
+		setQuery(query);
+		setUserAgent(userAgent);
+		setPage(page);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public WikileaksSearch(String query, String userAgent, int page, int timeout){
+		setQuery(query);
+		setUserAgent(userAgent);
+		setPage(page);
+		setTimeout(timeout);
+	}
+
 
 	@Override
 	public ArrayList<SearchResult> search() throws Exception {
@@ -27,15 +65,17 @@ public class WikileaksSearch extends SearchEngine{
 		
 		//Connect to Server
 		connection = Jsoup.connect(new StringBuilder(NAME_DOMAIN)
-					.append("/?qpage=1&q=")
+					.append("/?qpage=")
+					.append(page)
+					.append("&q=")
 					.append(query)
 					.append("&sort=0#results")
 					.toString());
 		//Get HTML Document
 		final Document doc = connection
-					.userAgent(DEFAULT_USER_AGENT)
+					.userAgent(userAgent)
 					.followRedirects(true)
-					.timeout(DEFAULT_TIMEOUT)
+					.timeout(timeout)
 					.get();
 
 		httpStatus = getHttpStatus(connection);

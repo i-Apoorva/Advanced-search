@@ -10,7 +10,7 @@ public class SearchTest {
 
 	@Test
 	public void GoogleTestSimpleSearch() throws Exception {
-		SearchEngine engine = new GoogleSearch("Putin");
+		SearchEngine engine = new GoogleSearch("Putin", 4);
 		
 		ArrayList<SearchResult> arr = engine.search();
 		

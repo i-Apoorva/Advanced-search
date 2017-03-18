@@ -17,8 +17,46 @@ public final class YandexSearch extends SearchEngine {
 	private String httpStatus;
 	
 	public YandexSearch(String query){
-		this.query = query;
+		setQuery(query);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setPage(1);
+		setTimeout(DEFAULT_TIMEOUT);
 	}
+	
+	public YandexSearch(String query, String userAgent){
+		setUserAgent(userAgent);
+		setPage(1);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public YandexSearch(String query, int page){
+		setQuery(query);
+		setPage(page);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public YandexSearch(String query, int page, int timeout){
+		setQuery(query);
+		setPage(page);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setTimeout(timeout);
+	}
+	
+	public YandexSearch(String query, String userAgent, int page){
+		setQuery(query);
+		setUserAgent(userAgent);
+		setPage(page);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public YandexSearch(String query, String userAgent, int page, int timeout){
+		setQuery(query);
+		setUserAgent(userAgent);
+		setPage(page);
+		setTimeout(timeout);
+	}
+
 
 	@Override
 	public ArrayList<SearchResult> search() throws Exception {
@@ -27,13 +65,18 @@ public final class YandexSearch extends SearchEngine {
 		
 		//Get Connect to the Server
 		connection = Jsoup.connect(new StringBuilder(DOMAIN_NAME)
-								.append("/yandsearch?text=").append(query).toString());
+								.append("/yandsearch?text=")
+								.append(query)
+								.append("&p=")
+								.append(page)
+								.append("lr=10136")
+								.toString());
 		
 		//Get HTML Document
 		Document doc = 	connection
-        				.userAgent(DEFAULT_USER_AGENT)
+        				.userAgent(userAgent)
         				.followRedirects(true)
-        				.timeout(DEFAULT_TIMEOUT)
+        				.timeout(timeout)
         				.get();
         
         Elements main = doc.select("ul.serp-list");

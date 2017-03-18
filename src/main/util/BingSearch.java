@@ -17,7 +17,44 @@ public final class BingSearch extends SearchEngine {
 	private String httpStatus;
 	
 	public BingSearch(String query){
-		this.query = query;
+		setQuery(query);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setPage(1);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public BingSearch(String query, String userAgent){
+		setUserAgent(userAgent);
+		setPage(1);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public BingSearch(String query, int page){
+		setQuery(query);
+		setPage(page);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public BingSearch(String query, int page, int timeout){
+		setQuery(query);
+		setPage(page);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setTimeout(timeout);
+	}
+	
+	public BingSearch(String query, String userAgent, int page){
+		setQuery(query);
+		setUserAgent(userAgent);
+		setPage(page);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public BingSearch(String query, String userAgent, int page, int timeout){
+		setQuery(query);
+		setUserAgent(userAgent);
+		setPage(page);
+		setTimeout(timeout);
 	}
 
 	@Override
@@ -32,13 +69,18 @@ public final class BingSearch extends SearchEngine {
 		
 		// Connect to Server
 		connection = Jsoup.connect(new StringBuilder(DOMAIN_NAME)
-								.append("?q=").append(query).toString());
+								.append("?q=")
+								.append(query)
+								.append("&&filt=rf")
+								.append("&first=")
+								.append(page)
+								.toString());
 		
 		// Get HTML document
         Document doc = 	connection
-        				.userAgent(DEFAULT_USER_AGENT)
+        				.userAgent(userAgent)
         				.followRedirects(true)
-        				.timeout(DEFAULT_TIMEOUT)
+        				.timeout(timeout)
         				.get();
         
         Elements main = doc.select("ol#b_results");
