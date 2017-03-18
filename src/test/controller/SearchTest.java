@@ -57,12 +57,23 @@ public class SearchTest {
 		ArrayList<SearchResult> arr = engine.search();
 		
 		System.out.println(arr.get(0));
+		System.out.println(arr.get(1));
 		assertFalse(arr.isEmpty());
 	}
 	
 	@Test
 	public void UnbubbleTestSimpleSearch() throws Exception {
 		SearchEngine engine = new UnbubbleSearch("Erdogan");
+		
+		ArrayList<SearchResult> arr = engine.search();
+		
+		System.out.println(arr.get(0));
+		assertFalse(arr.isEmpty());
+	}
+	
+	@Test
+	public void WikileaksTestSimpleSearch() throws Exception {
+		SearchEngine engine = new WikileaksSearch("Siria");
 		
 		ArrayList<SearchResult> arr = engine.search();
 		
