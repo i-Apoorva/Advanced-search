@@ -36,14 +36,14 @@ public final class YahooSearch extends SearchEngine {
         				.timeout(DEFAULT_TIMEOUT)
         				.get();
         
-        Elements main = doc.select("ol.searchCenterMiddle");
+        Elements main = doc.select("#ce50");
         
-        Elements primary = main.select("li");
+        //Elements primary = main.select("li");
 
         //Get HTTP status
         httpStatus = getHttpStatus(connection);
         
-        for (Element result : primary){
+        for (Element result : main){
         	
         	String title = getSearchTitle(result);
         	String url = getSearchURL(result);

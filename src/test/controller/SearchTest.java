@@ -10,7 +10,7 @@ public class SearchTest {
 
 	@Test
 	public void GoogleTestSimpleSearch() throws Exception {
-		SearchEngine engine = new GoogleSearch("Putin");
+		SearchEngine engine = new GoogleSearch("Putin", 4);
 		
 		ArrayList<SearchResult> arr = engine.search();
 		
@@ -57,12 +57,23 @@ public class SearchTest {
 		ArrayList<SearchResult> arr = engine.search();
 		
 		System.out.println(arr.get(0));
+		System.out.println(arr.get(1));
 		assertFalse(arr.isEmpty());
 	}
 	
 	@Test
 	public void UnbubbleTestSimpleSearch() throws Exception {
 		SearchEngine engine = new UnbubbleSearch("Erdogan");
+		
+		ArrayList<SearchResult> arr = engine.search();
+		
+		System.out.println(arr.get(0));
+		assertFalse(arr.isEmpty());
+	}
+	
+	@Test
+	public void WikileaksTestSimpleSearch() throws Exception {
+		SearchEngine engine = new WikileaksSearch("Siria");
 		
 		ArrayList<SearchResult> arr = engine.search();
 		
