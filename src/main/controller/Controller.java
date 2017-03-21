@@ -1,10 +1,11 @@
 package main.controller;
 
 import java.util.ArrayList;
-import main.util.GoogleSearch;
-import main.util.BingSearch;
-import main.util.YandexSearch;
-import main.util.WikileaksSearch;
+
+import main.engines.BingSearch;
+import main.engines.GoogleSearch;
+import main.engines.WikileaksSearch;
+import main.engines.YandexSearch;
 import main.model.SearchResult;
 
 public class Controller {

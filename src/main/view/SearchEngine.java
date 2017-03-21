@@ -1,3 +1,4 @@
+package main.view;
 
 import java.util.*;
 import main.controller.Controller;

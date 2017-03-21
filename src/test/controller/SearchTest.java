@@ -2,6 +2,13 @@ package test.controller;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+
+import main.engines.BingSearch;
+import main.engines.GoogleSearch;
+import main.engines.SearchEngine;
+import main.engines.WikileaksSearch;
+import main.engines.YahooSearch;
+import main.engines.YandexSearch;
 import main.model.SearchResult;
 import org.junit.Test;
 import main.util.*;

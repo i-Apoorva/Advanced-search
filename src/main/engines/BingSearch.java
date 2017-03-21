@@ -1,4 +1,4 @@
-package main.util;
+package main.engines;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;  
@@ -8,49 +8,49 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import main.model.SearchResult;
 
-
-public final class GoogleSearch extends SearchEngine {
+public final class BingSearch extends SearchEngine {
 	
-	private static final String NAME_DOMAIN = "https://google.com";
-	private Connection connection;
+	private static final String DOMAIN_NAME = "https://bing.com/";
 	private ArrayList<SearchResult> array;
+	private Connection connection;
+	private String query;
 	private String httpStatus;
 	
-	public GoogleSearch(String query){
+	public BingSearch(String query){
 		setQuery(query);
 		setUserAgent(DEFAULT_USER_AGENT);
 		setPage(DEFAULT_PAGE);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
-	public GoogleSearch(String query, String userAgent){
+	public BingSearch(String query, String userAgent){
 		setUserAgent(userAgent);
 		setPage(DEFAULT_PAGE);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
-	public GoogleSearch(String query, int page){
+	public BingSearch(String query, int page){
 		setQuery(query);
 		setPage(page);
 		setUserAgent(DEFAULT_USER_AGENT);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
-	public GoogleSearch(String query, int page, int timeout){
+	public BingSearch(String query, int page, int timeout){
 		setQuery(query);
 		setPage(page);
 		setUserAgent(DEFAULT_USER_AGENT);
 		setTimeout(timeout);
 	}
 	
-	public GoogleSearch(String query, String userAgent, int page){
+	public BingSearch(String query, String userAgent, int page){
 		setQuery(query);
 		setUserAgent(userAgent);
 		setPage(page);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
-	public GoogleSearch(String query, String userAgent, int page, int timeout){
+	public BingSearch(String query, String userAgent, int page, int timeout){
 		setQuery(query);
 		setUserAgent(userAgent);
 		setPage(page);
@@ -58,37 +58,52 @@ public final class GoogleSearch extends SearchEngine {
 	}
 
 	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see main.util.SearchEngine#search()
+	 */
+	
 	public ArrayList<SearchResult> search() throws Exception {
 		
 		array = new ArrayList();
 		
-		//Connect to Server
-		connection = Jsoup.connect(new StringBuilder(NAME_DOMAIN)
-				.append("/search?q=")
-				.append(query)
-				.append("&start=")
-				.append((page-1)*10)
-				.toString());
+		// Connect to Server
+		connection = Jsoup.connect(new StringBuilder(DOMAIN_NAME)
+								.append("?q=")
+								.append(query)
+								.append("&&filt=rf")
+								.append("&first=")
+								.append(page)
+								.toString());
 		
-		//Get HTML Document
-		final Document doc = connection
-				.userAgent(userAgent)
-				.followRedirects(true)
-				.timeout(DEFAULT_TIMEOUT)
-				.get();
-		
-		httpStatus = getHttpStatus(connection);
-		
-		//Get title and url to all results
-		for (Element result : doc.select("h3.r a")){
+		// Get HTML document
+        Document doc = 	connection
+        				.userAgent(userAgent)
+        				.followRedirects(true)
+        				.timeout(timeout)
+        				.get();
+        
+        Elements main = doc.select("ol#b_results");
+        
+        Elements primary = main.select("li.b_algo");
+        
+        //Get HttpStatus
+        httpStatus = getHttpStatus(connection);
 
-			String title = getSearchTitle(result);
-			String url = getSearchURL(result);
-
-			array.add(new SearchResult(title, url, httpStatus));
-		}
+        //Get title and url to all results
+        for (Element result : primary){
+        	
+        	String title = getSearchTitle(result);
+        	String url = getSearchURL(result);
+        	
+        	
+        	//add to ArrayList
+        	array.add(new SearchResult(title, url, httpStatus));
+       }
+        
+       
+       return array;
 		
-		return array;
 	}
 	
 	/*
@@ -100,7 +115,6 @@ public final class GoogleSearch extends SearchEngine {
 	private String getSearchTitle(Element e){
 		return e.text();
 	}
-	
 	/*
 	 * Return the news URL
 	 * 
@@ -123,22 +137,5 @@ public final class GoogleSearch extends SearchEngine {
 				.append(connection.response().statusMessage())
 				.toString();
 	}
-	
-//	private void setQuery(String query){
-//		this.query = query;
-//	}
-//	
-//	private void setPage(int page){
-//		this.page = page;
-//	}
-//	
-//	private void setUserAgent(String userAgent){
-//		this.userAgent = userAgent;
-//	}
-//	
-//	private void setTimeout(int timeout){
-//		this.timeout = timeout;
-//	}
-
-
 }
+
