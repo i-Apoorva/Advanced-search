@@ -3,15 +3,16 @@ package main.controller;
 import java.util.ArrayList;
 import main.util.GoogleSearch;
 import main.util.BingSearch;
-import main.util.YippySearch;
-import main.util.SearchEngine;
+import main.util.YandexSearch;
+import main.util.WikileaksSearch;
 import main.model.SearchResult;
 
 public class Controller {
 
 	private GoogleSearch google;
 	private BingSearch bing;
-	private YippySearch yippy; 
+	private YandexSearch yandex;
+	private WikileaksSearch wikileaks;
 	
 	public ArrayList<SearchResult> googleSearch(String query) throws Exception{
 		google = new GoogleSearch(query);
@@ -23,9 +24,14 @@ public class Controller {
 		return bing.search();
 	}
 	
-	public ArrayList<SearchResult> yippySearch(String query) throws Exception{
-		yippy = new YippySearch(query);
-		return yippy.search();
+	public ArrayList<SearchResult> yandexSearch(String query) throws Exception{
+		yandex = new YandexSearch(query);
+		return yandex.search();
+	}
+	
+	public ArrayList<SearchResult> wikileaksSearch(String query) throws Exception{
+		wikileaks = new WikileaksSearch(query);
+		return wikileaks.search();
 	}
 	
 }

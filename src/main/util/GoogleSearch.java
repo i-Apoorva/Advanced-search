@@ -19,13 +19,13 @@ public final class GoogleSearch extends SearchEngine {
 	public GoogleSearch(String query){
 		setQuery(query);
 		setUserAgent(DEFAULT_USER_AGENT);
-		setPage(1);
+		setPage(DEFAULT_PAGE);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
 	public GoogleSearch(String query, String userAgent){
 		setUserAgent(userAgent);
-		setPage(1);
+		setPage(DEFAULT_PAGE);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	

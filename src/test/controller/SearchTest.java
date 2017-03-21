@@ -30,15 +30,6 @@ public class SearchTest {
 		
 	}
 	
-	@Test
-	public void YippyTestSimpleSearch() throws Exception {
-		SearchEngine engine = new YippySearch("Erdogan");
-		
-		ArrayList<SearchResult> arr = engine.search();
-		
-		System.out.println(arr.get(0));
-		assertFalse(arr.isEmpty());
-	}
 	
 	@Test
 	public void YandexTestSimpleSearch() throws Exception {
@@ -58,16 +49,6 @@ public class SearchTest {
 		
 		System.out.println(arr.get(0));
 		System.out.println(arr.get(1));
-		assertFalse(arr.isEmpty());
-	}
-	
-	@Test
-	public void UnbubbleTestSimpleSearch() throws Exception {
-		SearchEngine engine = new UnbubbleSearch("Erdogan");
-		
-		ArrayList<SearchResult> arr = engine.search();
-		
-		System.out.println(arr.get(0));
 		assertFalse(arr.isEmpty());
 	}
 	
