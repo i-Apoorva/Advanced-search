@@ -1,4 +1,4 @@
-package main.util;
+package main.engines;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;  
@@ -8,54 +8,46 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import main.model.SearchResult;
 
-public final class BingSearch extends SearchEngine {
+public final class YahooSearch extends SearchEngine {
 	
-	private static final String DOMAIN_NAME = "https://bing.com/";
+	private static final String DOMAIN_NAME = "https://search.yahoo.com/";
 	private ArrayList<SearchResult> array;
 	private Connection connection;
 	private String query;
 	private String httpStatus;
 	
-	public BingSearch(String query){
+	public YahooSearch(String query){
 		this.query = query;
 	}
 
 	@Override
-	/*
-	 * (non-Javadoc)
-	 * @see main.util.SearchEngine#search()
-	 */
-	
 	public ArrayList<SearchResult> search() throws Exception {
 		
 		array = new ArrayList();
 		
-		// Connect to Server
+		//Get Connect to the Server
 		connection = Jsoup.connect(new StringBuilder(DOMAIN_NAME)
-								.append("?q=").append(query).toString());
+        				.append("?p=").append(query).toString()); 	
 		
-		// Get HTML document
+		//Get HTML Document
         Document doc = 	connection
         				.userAgent(DEFAULT_USER_AGENT)
         				.followRedirects(true)
         				.timeout(DEFAULT_TIMEOUT)
         				.get();
         
-        Elements main = doc.select("ol#b_results");
+        Elements main = doc.select("#ce50");
         
-        Elements primary = main.select("li.b_algo");
-        
-        //Get HttpStatus
-        httpStatus = getHttpStatus(connection);
+        //Elements primary = main.select("li");
 
-        //Get title and url to all results
-        for (Element result : primary){
+        //Get HTTP status
+        httpStatus = getHttpStatus(connection);
+        
+        for (Element result : main){
         	
         	String title = getSearchTitle(result);
         	String url = getSearchURL(result);
         	
-        	
-        	//add to ArrayList
         	array.add(new SearchResult(title, url, httpStatus));
        }
         
@@ -65,22 +57,23 @@ public final class BingSearch extends SearchEngine {
 	}
 	
 	/*
-	 * Return the news title
+	 * Return the search title
 	 * 
 	 * @param e an HTML Element 
 	 * @return		String that represent the Title
 	 */
 	private String getSearchTitle(Element e){
-		return e.text();
+		return e.select("h3.title").text();
 	}
+	
 	/*
-	 * Return the news URL
+	 * Return the search URL
 	 * 
 	 * @param e an HTML Element
 	 * @return		String that represent URL
 	 */
 	private String getSearchURL(Element e){
-		return e.attr("href");
+		return e.select("span").text();
 	}
 	
 	/*
@@ -95,5 +88,12 @@ public final class BingSearch extends SearchEngine {
 				.append(connection.response().statusMessage())
 				.toString();
 	}
+
+	//@Override
+	/*public ArrayList<SearchResult> search(String query, int max) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}*/
+
 }
 

@@ -1,4 +1,4 @@
-package main.util;
+package main.engines;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;  
@@ -14,11 +14,47 @@ public final class GoogleSearch extends SearchEngine {
 	private static final String NAME_DOMAIN = "https://google.com";
 	private Connection connection;
 	private ArrayList<SearchResult> array;
-	private String query;
 	private String httpStatus;
 	
 	public GoogleSearch(String query){
-		this.query = query;
+		setQuery(query);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setPage(DEFAULT_PAGE);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public GoogleSearch(String query, String userAgent){
+		setUserAgent(userAgent);
+		setPage(DEFAULT_PAGE);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public GoogleSearch(String query, int page){
+		setQuery(query);
+		setPage(page);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public GoogleSearch(String query, int page, int timeout){
+		setQuery(query);
+		setPage(page);
+		setUserAgent(DEFAULT_USER_AGENT);
+		setTimeout(timeout);
+	}
+	
+	public GoogleSearch(String query, String userAgent, int page){
+		setQuery(query);
+		setUserAgent(userAgent);
+		setPage(page);
+		setTimeout(DEFAULT_TIMEOUT);
+	}
+	
+	public GoogleSearch(String query, String userAgent, int page, int timeout){
+		setQuery(query);
+		setUserAgent(userAgent);
+		setPage(page);
+		setTimeout(timeout);
 	}
 
 	@Override
@@ -28,11 +64,15 @@ public final class GoogleSearch extends SearchEngine {
 		
 		//Connect to Server
 		connection = Jsoup.connect(new StringBuilder(NAME_DOMAIN)
-				.append("/search?q=").append(query).toString());
+				.append("/search?q=")
+				.append(query)
+				.append("&start=")
+				.append((page-1)*10)
+				.toString());
 		
 		//Get HTML Document
 		final Document doc = connection
-				.userAgent(DEFAULT_USER_AGENT)
+				.userAgent(userAgent)
 				.followRedirects(true)
 				.timeout(DEFAULT_TIMEOUT)
 				.get();
@@ -83,26 +123,22 @@ public final class GoogleSearch extends SearchEngine {
 				.append(connection.response().statusMessage())
 				.toString();
 	}
-	//@Override
-	public ArrayList<SearchResult> search(String query, int max) throws Exception {
-		
-		array = new ArrayList();
+	
+//	private void setQuery(String query){
+//		this.query = query;
+//	}
+//	
+//	private void setPage(int page){
+//		this.page = page;
+//	}
+//	
+//	private void setUserAgent(String userAgent){
+//		this.userAgent = userAgent;
+//	}
+//	
+//	private void setTimeout(int timeout){
+//		this.timeout = timeout;
+//	}
 
-		final Document doc = Jsoup.connect(new StringBuilder(NAME_DOMAIN)
-				.append("/search?q=").append(query).append("&num").append(max).toString())
-				.userAgent(DEFAULT_USER_AGENT)
-				.followRedirects(true)
-				.timeout(DEFAULT_TIMEOUT)
-				.get();
 
-		for (Element result : doc.select("h3.r a")){
-
-			final String title = result.text();
-			final String url = result.attr("href");
-
-			array.add(new SearchResult(title, url));
-		}
-		
-		return array;
-	}
 }
