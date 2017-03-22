@@ -1,25 +1,33 @@
-package main.util;
+package main.engines;
 
 import java.util.ArrayList;
 
 import main.model.SearchResult;
 
 public abstract class SearchEngine{
-	
-	//Default user agent 
+	 
 	protected static final String DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36";
-	
-	//Default timeout
 	protected static final Integer DEFAULT_TIMEOUT = 8000;
+	protected static final Integer DEFAULT_PAGE = 1;
+	protected String userAgent;
+	protected String query;
+	protected Integer page;
+	protected Integer timeout;
 	
-	protected Integer max;
-	
-	public void setMax(Integer max){
-		this.max = max;
+	void setQuery(String query){
+		this.query = query;
 	}
 	
-	public Integer getMax(){
-		return this.max;
+	void setPage(int page){
+		this.page = page;
+	}
+	
+	void setUserAgent(String userAgent){
+		this.userAgent = userAgent;
+	}
+	
+	void setTimeout(int timeout){
+		this.timeout = timeout;
 	}
 	
 	/*
@@ -27,8 +35,4 @@ public abstract class SearchEngine{
 	 * @see main.model.SearchResult#search()
 	 */
 	public abstract ArrayList<SearchResult> search() throws Exception;
-	
-	//public abstract ArrayList<SearchResult> search(String query, int max) throws Exception;
-
-
 }
