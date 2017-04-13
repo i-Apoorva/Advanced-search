@@ -1,5 +1,7 @@
 package main.view;
 
+
+
 import java.util.*;
 import main.controller.Controller;
 import main.model.SearchResult;
@@ -26,6 +28,8 @@ import org.eclipse.swt.events.TouchListener;
 import org.eclipse.swt.events.TouchEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.graphics.Point;
 
 public class SearchEngine{
 	
@@ -41,51 +45,36 @@ public class SearchEngine{
 		controller = new Controller();
 		display = new Display();
 		shell = new Shell(display);
-		shell.setSize(399, 394);
-		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
+		shell.setMinimumSize(new Point(136, 60));
+		shell.setBackgroundImage(SWTResourceManager.getImage(SearchEngine.class, "/main/background3.png"));
+		shell.setSize(1020, 800);
+		RowLayout rowLayout = new RowLayout();
+		shell.setLayout(rowLayout);
+		rowLayout.wrap = true;
+		rowLayout.justify=true;
+		rowLayout.pack=true;
 		
 		Composite composite = new Composite(shell, SWT.NONE);
+		composite.setLayoutData(new RowData(997, 800));
+		composite.setBackgroundImage(SWTResourceManager.getImage(SearchEngine.class, "/main/background3.png"));
 		
 		text = new Text(composite, SWT.BORDER);
-		text.setBounds(140, 84, 85, 27);
+		text.setBounds(65, 111, 757, 33);
 		
 		//Initializing primary label
 		Label lblAdvancedSearch = new Label(composite, SWT.NONE);
+		lblAdvancedSearch.setBackground(SWTResourceManager.getColor(255, 248, 220));
+		lblAdvancedSearch.setImage(SWTResourceManager.getImage(SearchEngine.class, "/main/logonew.png"));
 		lblAdvancedSearch.setFont(SWTResourceManager.getFont("Segoe UI Light", 17, SWT.NORMAL));
 		lblAdvancedSearch.setAlignment(SWT.CENTER);
-		lblAdvancedSearch.setBounds(10, 23, 345, 44);
-		lblAdvancedSearch.setText("Advanced Search");
-		
-		//Initializing ScrolledComposite
-		ScrolledComposite scrolledComposite = new ScrolledComposite(composite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setExpandVertical(true);
-		scrolledComposite.setBounds(10, 130, 363, 179);
-		scrolledComposite.setExpandHorizontal(true);
-		
-		//Initializing Table
-		Table table = new Table(scrolledComposite, SWT.BORDER);
-		
-		//Initializing TableColumn
-		TableColumn tc1 = new TableColumn(table, SWT.CENTER);
-	    TableColumn tc2 = new TableColumn(table, SWT.CENTER);
-	    TableColumn tc3 = new TableColumn(table, SWT.CENTER);
-	    tc1.setText("Title");
-	    tc2.setText("URL");
-	    tc3.setText("Status");
-	    tc1.setWidth(100);
-	    tc2.setWidth(150);
-	    tc3.setWidth(100);
-	    table.setHeaderVisible(true);
-
-	    
-		scrolledComposite.setContent(table);
-		scrolledComposite.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		lblAdvancedSearch.setBounds(269, 38, 428, 71);
 		
 		//Initializing Button
 		Button btnSearch = new Button(composite, SWT.CENTER);
-		
+		//Initializing Table
+				Table table_1 = new Table(composite, SWT.BORDER);
+				table_1.setBounds(65, 156, 838, 563);
+				
 		//Adding Click Event Listener to btnSearch
 		btnSearch.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -105,7 +94,7 @@ public class SearchEngine{
 						
 						//Add the Search result in Table
 						for (int i = 0; i < result.size(); i++){
-							TableItem item = new TableItem(table, SWT.NONE);
+							TableItem item = new TableItem(table_1, SWT.NONE);
 							item.setText(0, result.get(i).getTitle());
 							item.setText(1, result.get(i).getURL());
 							item.setText(2, result.get(i).getHttpStatus());
@@ -115,8 +104,23 @@ public class SearchEngine{
 				}.run();
 			}
 		});
-		btnSearch.setBounds(139, 320, 75, 25);
+		btnSearch.setBounds(828, 111, 75, 33);
 		btnSearch.setText("Search");
+		
+		
+		//Initializing TableColumn
+		TableColumn tc1 = new TableColumn(table_1, SWT.CENTER);
+		TableColumn tc2 = new TableColumn(table_1, SWT.CENTER);
+		TableColumn tc3 = new TableColumn(table_1, SWT.CENTER);
+		tc1.setText("Title");
+		tc2.setText("URL");
+		tc3.setText("Status");
+		tc1.setWidth(400);
+		tc2.setWidth(300);
+		tc3.setWidth(150);
+		table_1.setHeaderVisible(true);
+		table_1.setHeaderVisible(true);
+		table_1.setLinesVisible(true);
 		
 		
 		shell.open();
