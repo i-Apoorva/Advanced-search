@@ -1,4 +1,4 @@
-package main.util;
+package main.engines;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;  
@@ -8,49 +8,49 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import main.model.SearchResult;
 
-public final class BingSearch extends SearchEngine {
+
+public final class GoogleSearch extends SearchEngine {
 	
-	private static final String DOMAIN_NAME = "https://bing.com/";
-	private ArrayList<SearchResult> array;
+	private static final String NAME_DOMAIN = "https://google.com";
 	private Connection connection;
-	private String query;
+	private ArrayList<SearchResult> array;
 	private String httpStatus;
 	
-	public BingSearch(String query){
+	public GoogleSearch(String query){
 		setQuery(query);
 		setUserAgent(DEFAULT_USER_AGENT);
-		setPage(1);
+		setPage(DEFAULT_PAGE);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
-	public BingSearch(String query, String userAgent){
+	public GoogleSearch(String query, String userAgent){
 		setUserAgent(userAgent);
-		setPage(1);
+		setPage(DEFAULT_PAGE);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
-	public BingSearch(String query, int page){
+	public GoogleSearch(String query, int page){
 		setQuery(query);
 		setPage(page);
 		setUserAgent(DEFAULT_USER_AGENT);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
-	public BingSearch(String query, int page, int timeout){
+	public GoogleSearch(String query, int page, int timeout){
 		setQuery(query);
 		setPage(page);
 		setUserAgent(DEFAULT_USER_AGENT);
 		setTimeout(timeout);
 	}
 	
-	public BingSearch(String query, String userAgent, int page){
+	public GoogleSearch(String query, String userAgent, int page){
 		setQuery(query);
 		setUserAgent(userAgent);
 		setPage(page);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
-	public BingSearch(String query, String userAgent, int page, int timeout){
+	public GoogleSearch(String query, String userAgent, int page, int timeout){
 		setQuery(query);
 		setUserAgent(userAgent);
 		setPage(page);
@@ -58,52 +58,37 @@ public final class BingSearch extends SearchEngine {
 	}
 
 	@Override
-	/*
-	 * (non-Javadoc)
-	 * @see main.util.SearchEngine#search()
-	 */
-	
 	public ArrayList<SearchResult> search() throws Exception {
 		
 		array = new ArrayList();
 		
-		// Connect to Server
-		connection = Jsoup.connect(new StringBuilder(DOMAIN_NAME)
-								.append("?q=")
-								.append(query)
-								.append("&&filt=rf")
-								.append("&first=")
-								.append(page)
-								.toString());
+		//Connect to Server
+		connection = Jsoup.connect(new StringBuilder(NAME_DOMAIN)
+				.append("/search?q=")
+				.append(query)
+				.append("&start=")
+				.append((page-1)*10)
+				.toString());
 		
-		// Get HTML document
-        Document doc = 	connection
-        				.userAgent(userAgent)
-        				.followRedirects(true)
-        				.timeout(timeout)
-        				.get();
-        
-        Elements main = doc.select("ol#b_results");
-        
-        Elements primary = main.select("li.b_algo");
-        
-        //Get HttpStatus
-        httpStatus = getHttpStatus(connection);
+		//Get HTML Document
+		final Document doc = connection
+				.userAgent(userAgent)
+				.followRedirects(true)
+				.timeout(DEFAULT_TIMEOUT)
+				.get();
+		
+		httpStatus = getHttpStatus(connection);
+		
+		//Get title and url to all results
+		for (Element result : doc.select("h3.r a")){
 
-        //Get title and url to all results
-        for (Element result : primary){
-        	
-        	String title = getSearchTitle(result);
-        	String url = getSearchURL(result);
-        	
-        	
-        	//add to ArrayList
-        	array.add(new SearchResult(title, url, httpStatus));
-       }
-        
-       
-       return array;
+			String title = getSearchTitle(result);
+			String url = getSearchURL(result);
+
+			array.add(new SearchResult(title, url, httpStatus));
+		}
 		
+		return array;
 	}
 	
 	/*
@@ -115,6 +100,7 @@ public final class BingSearch extends SearchEngine {
 	private String getSearchTitle(Element e){
 		return e.text();
 	}
+	
 	/*
 	 * Return the news URL
 	 * 
@@ -137,5 +123,22 @@ public final class BingSearch extends SearchEngine {
 				.append(connection.response().statusMessage())
 				.toString();
 	}
-}
+	
+//	private void setQuery(String query){
+//		this.query = query;
+//	}
+//	
+//	private void setPage(int page){
+//		this.page = page;
+//	}
+//	
+//	private void setUserAgent(String userAgent){
+//		this.userAgent = userAgent;
+//	}
+//	
+//	private void setTimeout(int timeout){
+//		this.timeout = timeout;
+//	}
 
+
+}

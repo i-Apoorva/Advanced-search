@@ -2,6 +2,13 @@ package test.controller;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+
+import main.engines.BingSearch;
+import main.engines.GoogleSearch;
+import main.engines.SearchEngine;
+import main.engines.WikileaksSearch;
+import main.engines.YahooSearch;
+import main.engines.YandexSearch;
 import main.model.SearchResult;
 import org.junit.Test;
 import main.util.*;
@@ -30,15 +37,6 @@ public class SearchTest {
 		
 	}
 	
-	@Test
-	public void YippyTestSimpleSearch() throws Exception {
-		SearchEngine engine = new YippySearch("Erdogan");
-		
-		ArrayList<SearchResult> arr = engine.search();
-		
-		System.out.println(arr.get(0));
-		assertFalse(arr.isEmpty());
-	}
 	
 	@Test
 	public void YandexTestSimpleSearch() throws Exception {
@@ -58,16 +56,6 @@ public class SearchTest {
 		
 		System.out.println(arr.get(0));
 		System.out.println(arr.get(1));
-		assertFalse(arr.isEmpty());
-	}
-	
-	@Test
-	public void UnbubbleTestSimpleSearch() throws Exception {
-		SearchEngine engine = new UnbubbleSearch("Erdogan");
-		
-		ArrayList<SearchResult> arr = engine.search();
-		
-		System.out.println(arr.get(0));
 		assertFalse(arr.isEmpty());
 	}
 	

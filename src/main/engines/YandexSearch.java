@@ -1,4 +1,4 @@
-package main.util;
+package main.engines;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;  
@@ -19,13 +19,13 @@ public final class YandexSearch extends SearchEngine {
 	public YandexSearch(String query){
 		setQuery(query);
 		setUserAgent(DEFAULT_USER_AGENT);
-		setPage(1);
+		setPage(DEFAULT_PAGE);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
 	public YandexSearch(String query, String userAgent){
 		setUserAgent(userAgent);
-		setPage(1);
+		setPage(DEFAULT_PAGE);
 		setTimeout(DEFAULT_TIMEOUT);
 	}
 	
