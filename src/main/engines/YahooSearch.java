@@ -27,7 +27,12 @@ public final class YahooSearch extends SearchEngine {
 		
 		//Get Connect to the Server
 		connection = Jsoup.connect(new StringBuilder(DOMAIN_NAME)
-        				.append("?p=").append(query).toString()); 	
+        				.append("?p=")
+        				.append(query)
+        				.append("&ei=UTF-8")
+						.append("&b=")
+						.append(DEFAULT_PAGE)
+        				.toString()); 	
 		
 		//Get HTML Document
         Document doc = 	connection
@@ -36,9 +41,7 @@ public final class YahooSearch extends SearchEngine {
         				.timeout(DEFAULT_TIMEOUT)
         				.get();
         
-        Elements main = doc.select("#ce50");
-        
-        //Elements primary = main.select("li");
+        Elements main = doc.select(".algo-sr");
 
         //Get HTTP status
         httpStatus = getHttpStatus(connection);

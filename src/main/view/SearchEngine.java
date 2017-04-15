@@ -46,7 +46,7 @@ public class SearchEngine{
 		display = new Display();
 		shell = new Shell(display);
 		shell.setMinimumSize(new Point(136, 60));
-		shell.setBackgroundImage(SWTResourceManager.getImage(SearchEngine.class, "/main/background3.png"));
+		shell.setBackgroundImage(SWTResourceManager.getImage(SearchEngine.class,"/main/background3.png"));
 		shell.setSize(1020, 800);
 		RowLayout rowLayout = new RowLayout();
 		shell.setLayout(rowLayout);
