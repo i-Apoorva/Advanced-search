@@ -20,8 +20,18 @@ public class Controller {
 		return google.search();
 	}
 	
+	public ArrayList<SearchResult> googleSearch(String query, String userAgent) throws Exception{
+		google = new GoogleSearch(query, userAgent);
+		return google.search();
+	}
+	
 	public ArrayList<SearchResult> bingSearch(String query) throws Exception{
 		bing = new BingSearch(query);
+		return bing.search();
+	}
+	
+	public ArrayList<SearchResult> bingSearch(String query, String userAgent) throws Exception{
+		bing = new BingSearch(query, userAgent);
 		return bing.search();
 	}
 	
@@ -32,6 +42,10 @@ public class Controller {
 	
 	public ArrayList<SearchResult> wikileaksSearch(String query) throws Exception{
 		wikileaks = new WikileaksSearch(query);
+		return wikileaks.search();
+	}
+	public ArrayList<SearchResult> wikileaksSearch(String query, String userAgent) throws Exception{
+		wikileaks = new WikileaksSearch(query, userAgent);
 		return wikileaks.search();
 	}
 	

@@ -4,6 +4,7 @@ package main.view;
 
 import java.util.*;
 import main.controller.Controller;
+import main.engines.GoogleSearch;
 import main.model.SearchResult;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -30,6 +31,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
 public class SearchEngine{
 	
@@ -46,7 +49,7 @@ public class SearchEngine{
 		display = new Display();
 		shell = new Shell(display);
 		shell.setMinimumSize(new Point(136, 60));
-		shell.setBackgroundImage(SWTResourceManager.getImage(SearchEngine.class, "/main/background3.png"));
+		shell.setBackgroundImage(SWTResourceManager.getImage(SearchEngine.class,"/main/background3.png"));
 		shell.setSize(1020, 800);
 		RowLayout rowLayout = new RowLayout();
 		shell.setLayout(rowLayout);
@@ -87,7 +90,7 @@ public class SearchEngine{
 						
 						ArrayList<SearchResult> result = new ArrayList<SearchResult>();
 						try {
-							result.addAll(controller.googleSearch(text.getText()));
+							result.addAll(controller.googleSearch(text.getText(),GoogleSearch.DEFAULT_USER_AGENT));
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -121,6 +124,27 @@ public class SearchEngine{
 		table_1.setHeaderVisible(true);
 		table_1.setHeaderVisible(true);
 		table_1.setLinesVisible(true);
+		
+		Menu menu = new Menu(shell, SWT.BAR);
+		shell.setMenuBar(menu);
+		
+		MenuItem mntmConfiguration = new MenuItem(menu, SWT.NONE);
+		mntmConfiguration.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				
+				ConfigDialog config = new ConfigDialog(shell);
+				
+				config.open();
+				
+				GoogleSearch.DEFAULT_USER_AGENT = config.getUserAgent();
+				
+			}
+		});
+		mntmConfiguration.setText("Configuration");
+		
+		MenuItem mntmNewItem = new MenuItem(menu, SWT.NONE);
+		mntmNewItem.setText("About");
 		
 		
 		shell.open();
